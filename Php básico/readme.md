@@ -1161,6 +1161,8 @@ encenderCarros($carros);
 ```
 ![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/ej_fin.png)
 
+
+_El ejercicio quedará adjunto en este repositorio_
 ## Autores ✒️
 
 * **Edward Reyes** - *Trabajo Inicial* - [edw-rys](https://github.com/edw-rys)
@@ -1171,7 +1173,6 @@ encenderCarros($carros);
 
 * Sólo responderé a la anfitriona.
 * La pregunta tene que ser de php o POO.
-
 
 
 ---
