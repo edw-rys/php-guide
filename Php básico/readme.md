@@ -6,13 +6,13 @@ _Para ejecutar archivos de  php se necesita un servidor, en este caso usaremos u
 [Descargar xampp](https://www.apachefriends.org/es/download.html)
 
 
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/xampp-control.png)<br>
+![alt text](img/xampp-control.png)<br>
 _Se necesitará ejecutar el control panel de xampp, este lo podrá encontrar en c:/xampp/xampp-control.exe_
 
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/port_xampp.png)<br>
+![alt text](img/port_xampp.png)<br>
 _Una vez hecho esto, abriremos el navegador y ponemos la ruta -> http://localhost y observaremos que nuestro servidor estará disponible_
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/localhost.png)<br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/other_port.png)<br>
+![alt text](img/localhost.png)<br>
+![alt text](img/other_port.png)<br>
 
 ## Uso externo del servidor
 _Para poder visualizar nuestro proyecto en php desde un dispositivo externo ya no usaremos la ruta de localhost, sino que usaremos la dirección ip del equipo que se está usando como servidor local_<br>
@@ -20,10 +20,10 @@ _Para poder visualizar nuestro proyecto en php desde un dispositivo externo ya n
 _Pasos_<br>
 _Abrimos la consola de comando o shell e introducimos el comando -> ipconfig_
 
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/ip_ext.png)<br>
+![alt text](img/ip_ext.png)<br>
 
 _Econtramos la dirección ip del equipo (En este caso se está conectado a una red wifi), ahora podremos acceder desde otro equipo que esté conectado a la misma red por medio de esa ip: http://192.168.1.11:port, siendo port el puerto de http_
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/ip_nav.png)<br>
+![alt text](img/ip_nav.png)<br>
 
 _En este caso trabajaremos con http://localhost (en el equipo local)_
 
@@ -31,21 +31,21 @@ _En este caso trabajaremos con http://localhost (en el equipo local)_
 
 _La ubicación en donde colocaremos nuestros archivos de php será en la carpeta htdocs dentro del directorio donde instalamos xampp._<br>
 c:/xampp/htdocs/
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/local_ubc.png)<br>
+![alt text](img/local_ubc.png)<br>
 
 _Dentro de ese directorio crearemos carpetas contenedores de cada proyecto_
 <br>
 <br>
 _Comenzaremos creando una carpeta llamada test_php (o cualquier nombre de su preferencia, evite poner espacios a los archivos o directorios del proyecto), y dentro crearemos un archivo llamado index.php_
 <br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/file_ext.png)<br>
+![alt text](img/file_ext.png)<br>
 
 _ahora probaremos en el navegador con la ruta_ <br>
 http://localhost/_nombre_de_carpeta/archivo
 en este caso el nombre de la carpeta es test_php y el archivo index.php<br>
 Quedaría así: http://localhost/test_php/index.php.<br>
 Abrimos en un navegador y nos saldrá la pantalla en blanco ya que el archivo no posee contenido.
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/nav_ini_test.png)<br>
+![alt text](img/nav_ini_test.png)<br>
 _Estamos listos._
 ## Comenzando 🚀
 
@@ -54,15 +54,15 @@ _Ya que tenemos preparado el ambiente para poder ejecutar archivos de php podemo
 Abriremos el editor de código o ID de su preferencia (En este caso se usará Visual Studio Code).
 <br>
 
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/vs_code.png)<br>
+![alt text](img/vs_code.png)<br>
 
 _Ahora abriremos el directorio en vs-> file->open folder..._
 <br>
 Luego seleccionaremos el directorio de nuestro proyecto y lo abriremos
 
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/a_open.png)<br>
+![alt text](img/a_open.png)<br>
 _Luego tendremos esta vista_
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/open_folder.png)<br>
+![alt text](img/open_folder.png)<br>
 _Seleccionaremos index.php para poder codificar_
 ### Codificando 📋
 
@@ -104,7 +104,7 @@ Dentro del código html podemos incluir código php y funcionará, sin embargo, 
 ```
 Obtendremos el siguiente resultado en el cúal se mostró el texto que se imprimió por medio de php (las etiquetas HTML no se modificarán y podremos observar en las herramientas de desarrollador alt+f12).
 
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/init_view.png)<br>
+![alt text](img/init_view.png)<br>
 
 _A partir de aquí codificaremos sólo en php y no tendremos ni una etiqueta html, sólo se pondrá en caso de ser necesario para mostrar información._
 
@@ -121,7 +121,7 @@ _Lo primero que siempre se aprende en cualquiér lenguaje de programación es im
 ?>
 ```
 Vista obtenida.
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/err_str.png)<br>
+![alt text](img/err_str.png)<br>
 _No te asustes, php nos mostrará una advertencia, pero nosotros nos enfocaremos en la ubicación del archivo que tiene el error y la línea para poder corregirla._<br>
 _Al principio nos imprimió el valor "mensaje", ya que este es un string y el valor está sin errores._
 
@@ -136,7 +136,7 @@ Ahora imprimiremos números y valores booleanos.
     // ojo, las palabras true y false ya están reservadas, por ende no mostrará ningún error
 ?>
 ```
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/print_num_bool.png)<br>
+![alt text](img/print_num_bool.png)<br>
 _Vemos el resultado, observaremos algo extraño, nos ha imprimido el 551, en ves de 55   true   false._
 <br>
 En primer lugar,  los valores que se imrpimen ahí van seguidos sin espacio, porque siendo imprimidos estos, no hay ni un string y alguna etiqueta de html que los separe, sólo son texto plano, esto va así.<br>
@@ -160,7 +160,7 @@ echo "salto";
 ?>
 ```
 
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/br_htph.png)<br>
+![alt text](img/br_htph.png)<br>
 
 
 _Podremos imprimir otras etiquetas html con algún contenido con php, usando la función echo:_
@@ -169,7 +169,7 @@ _Podremos imprimir otras etiquetas html con algún contenido con php, usando la 
 echo "<div><p>Message</p></div>"
 ?>
 ```
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/print_et_php.png)<br>
+![alt text](img/print_et_php.png)<br>
 
 _Ahora veremos un pequeño ejemplo de cómo imprimir valores con **var_dump(object)**_
 
@@ -188,7 +188,7 @@ _Ahora veremos un pequeño ejemplo de cómo imprimir valores con **var_dump(obje
     var_dump([1,12,5]); // arreglo de números.
 ?>
 ```
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/echo_var_dump.png)<br>
+![alt text](img/echo_var_dump.png)<br>
 Podremos observar los valores:<br>
 * Primer valor: vemos el tipo de datos y su dimensión, a un lado vemos el mensaje impreso
 * Segundo valor: vemos el tipo de dato y entre paréntesis el valor entero.
@@ -215,7 +215,7 @@ _Ejemplo_
 ?>
 ```
 Resultado:<br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/var_init.png)<br>
+![alt text](img/var_init.png)<br>
 
 Ahora vamos a variar un poco, definiendo algunas variables.
 ```php
@@ -240,7 +240,7 @@ Ahora vamos a variar un poco, definiendo algunas variables.
 ?>
 ```
 Resultado:<br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/value_ej_var.png)
+![alt text](img/value_ej_var.png)
 <br>
 Tal y como podemos observar, se imprime los valores que contienen las variables concatenados con las cadenas ("Producto:",...) que hemos indicado.
 
@@ -271,7 +271,7 @@ _Veremos este ejemplo con un enmarcado de html, recuerde que todo lo que está e
 </html>
 ```
 Resultado:<br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/print_e_h_php_2.png)
+![alt text](img/print_e_h_php_2.png)
 <hr>
 
 
@@ -313,7 +313,7 @@ Asi:<br>
 </html>
 ```
 El resultado será el mismo, pero el código estará más organizado:<br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/print_e_h_php_2.png)
+![alt text](img/print_e_h_php_2.png)
 <hr>
 
 Listo, eso es todo con las variables y los valores primitivos, pero también podremos guardar objetos en dichas variables.<br>
@@ -464,7 +464,7 @@ echo $personas[1]["nombre"];
 ?>
 ```
 Resultado: 
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/arr_str_i.png)<br>
+![alt text](img/arr_str_i.png)<br>
 
 
 ## Funciones de php más usadas  ⚙️
@@ -506,7 +506,7 @@ _**isset($var)**_
 ```
 
 Resultado:<br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/isset_test.png)
+![alt text](img/isset_test.png)
 <br>
 _**is_null($var)**_
 
@@ -531,7 +531,7 @@ _Esta función que nos provee php sirve para saber si una variable tiene el cont
 
 
 Resultado:<br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/is_null_fun_init.png)
+![alt text](img/is_null_fun_init.png)
 <br>
 
 _**count()**_<br>
@@ -597,7 +597,7 @@ _Declaración:_
 ?>
 ```
 Resultado:<br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/start_fun_i.png)<br>
+![alt text](img/start_fun_i.png)<br>
 
 _La razón por la cuál imprime primero "Aún no ejecuto mi función. :v" es porque el contenido de la función se llama después y esa es la prueba de que una función no se ejecuta hasta que se invoque._
 <br>
@@ -718,7 +718,7 @@ _Es decir, si tenemos los valores 1,5,9,7,20, al hacer el recorrido obtendremos 
 ?>
 ```
 Resultado: <br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/for_arr_num.png)<br>
+![alt text](img/for_arr_num.png)<br>
 
 Ahora algo más complejo
 ```php
@@ -769,7 +769,7 @@ La explicación está en que en cada recorrido del arreglo, la variable $persona
 * Ahora, ya sabemos qué vale persona, para presentar su nombre nomás nos referimos a la variable $persona y el índice con combre $persona["nombre"] y listo, ya tendremos el nombre.
 * Para la edad es silimar $persona["edad"] y la enviamos como parámetro en la función, la cuál retornará una cadena de text con el contenido generado según la codición.
 
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/for_per.png)<br>
+![alt text](img/for_per.png)<br>
 
 ### PHP OO -> php orientado a objetos ⌨️ 🎁 📦
 
@@ -834,7 +834,7 @@ Listo, problema resuelto, pero habría que enviar los datos de del arreglo indiv
 Con la programación orientada a objetos encapsularíamos cada característica del objeto a tratar y sus funcionalidades en una clase, dicha clase es una plantilla con los atributos del objeto, pero los datos los definiríamos cada vez que creamos un objeto.
 <br>
 
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/auto_poo.png)
+![alt text](img/auto_poo.png)
 <br>
 
 Entonces definiríamos la clase llamada carro.
@@ -961,7 +961,7 @@ $objeto ->  funcion ($params); enviamos valor a los parámatros en caso de que s
 $carroToyota->arranca();
 ?>
 ```
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/cap_poo_car_V1.png)<br>
+![alt text](img/cap_poo_car_V1.png)<br>
 Así podemos llamar a cualquier funcionalidad del objeto.
 
 ```php
@@ -977,7 +977,7 @@ $carroToyota->frena();
 ?>
 ```
 Resultado:<br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/ob_Car.png)
+![alt text](img/ob_Car.png)
 
 
 
@@ -1072,7 +1072,7 @@ class Carro
 
 
 Ahora tenemos en index.php otros daros<br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/files.png)<br>
+![alt text](img/files.png)<br>
 
 
 ```php
@@ -1117,7 +1117,7 @@ if(!empty($carros)){
 ```
 
 Resultados:<br>
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/ej_car_a.png)
+![alt text](img/ej_car_a.png)
 
 ```php
 <?php
@@ -1159,7 +1159,7 @@ echo "<br> Envío carros otra vez.";
 encenderCarros($carros);
 ?>
 ```
-![alt text](https://raw.githubusercontent.com/edw-rys/php-guide/master/Php%20b%C3%A1sico/img/ej_fin.png)
+![alt text](img/ej_fin.png)
 
 
 _El ejercicio quedará adjunto en este repositorio_

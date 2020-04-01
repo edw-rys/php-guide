@@ -185,6 +185,7 @@ header.php
         ?>
     </title>
     <!-- Permite añadir estilos externos -->
+    <!-- El link que contiene href trae estilos css desde una web externa -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     
 </head>
