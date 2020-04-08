@@ -1,4 +1,5 @@
 # Guía básica de php
+
 ## Comenzando 🚀
 
 _Para ejecutar archivos de  php se necesita un servidor, en este caso usaremos una aplicación que nos ofrece un servidor local -> xampp server._
@@ -15,6 +16,7 @@ _Una vez hecho esto, abriremos el navegador y ponemos la ruta -> http://localhos
 ![alt text](img/other_port.png)<br>
 
 ## Uso externo del servidor
+
 _Para poder visualizar nuestro proyecto en php desde un dispositivo externo ya no usaremos la ruta de localhost, sino que usaremos la dirección ip del equipo que se está usando como servidor local_<br>
 
 _Pasos_<br>
@@ -47,6 +49,7 @@ Quedaría así: http://localhost/test_php/index.php.<br>
 Abrimos en un navegador y nos saldrá la pantalla en blanco ya que el archivo no posee contenido.
 ![alt text](img/nav_ini_test.png)<br>
 _Estamos listos._
+
 ## Comenzando 🚀
 
 _Ya que tenemos preparado el ambiente para poder ejecutar archivos de php podemos empezar a codificar._
@@ -64,6 +67,7 @@ Luego seleccionaremos el directorio de nuestro proyecto y lo abriremos
 _Luego tendremos esta vista_
 ![alt text](img/open_folder.png)<br>
 _Seleccionaremos index.php para poder codificar_
+
 ### Codificando 📋
 
 _Para poder empezar a codificar en php siempre empezaremos con:_
