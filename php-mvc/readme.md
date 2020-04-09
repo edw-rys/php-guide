@@ -35,10 +35,11 @@ En la imágen tenemos dos url algo direfentes, pero eso se define en la lógica 
 <br>
 _Url -> a_<br>
 _Observaremos una url normal, pero nosotros tomaremos en cuenta de lo que irá después del ".com/", ya que según los siguientes campos se hará la llamada a algún controlador y se ejecutará un método del mismo._
-* 1a. En este primer campo el cuál se llama en la url va a cambiar según se requiera un controlador (Es decir, este campo es el cuál llamará al controlador, en caso de que haya un controlador para usuario, otro para las ventas, se tendrá que saber a que controlador llamar y ese campo lo indicará).
+* 1a. En el primer campo el cuál se llama en la url va a cambiar según se requiera un controlador (Es decir, este campo es el cuál llamará al controlador, en caso de que haya un controlador para usuario, otro para las ventas, se tendrá que saber a que controlador llamar y ese campo lo indicará).
 * 2a. Ya que sabemos a qué controlador entraremos, debemos saber qué acción realizar dentro del mismo, ya que hará uno para agregar, otro para consusltar, etc., y dependemos de este campo el cuál nos indicará qué acción realizar.
 
 <br>
+
 _Url ->b_<br>
 
 _En esta url vemos algo diferentes, en primer lugar se observa que no es una url nada amigable, ya que lleva parámetros, pero esta url se puede observar compleja de tratar, pero es más fácil de adaptar al momento de obtener los datos, ya que son parámetros enviados por GET -> **controlador=shop** y **method=all**_
