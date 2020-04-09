@@ -319,7 +319,7 @@ define('STATIC_'             , VIEWS.'static'.DS);
 //encabezado y pie
 define('HEADER'             , TEMPLATES.'header.php');
 define('FOOTER'             , TEMPLATES.'footer.php');
-define("NAVIGATION"         , COMPONENTS."navigation.php");
+define("NAVIGATION"         , COMPONENTS."nav.php");
 
 /**
  * Estas rutas son para archivos que se requieran para la presentación del archivo HTML, como imágenes, archivos css, js, etc.
@@ -439,7 +439,7 @@ Teniendo esto ya podremos usar un controlador y su método, así que creemos dos
             * 📄 config.php
         * 📦 [controllers]
             * 📄 IndexController.php
-            * 📄 MascotaController.php
+            * 📄 UserController.php
         * 📦 [models]
     * 📦 [assets] ->
         * 📦 [img]
@@ -478,7 +478,7 @@ Crearemos los archivos necesarios:
             * 📄 config.php
         * 📦 [controllers]
             * 📄 IndexController.php
-            * 📄 MascotaController.php
+            * 📄 UserController.php
         * 📦 [models]
     * 📦 [assets] ->
         * 📦 [img]
@@ -511,7 +511,7 @@ Crearemos los archivos necesarios:
 </head>
 <body>
     <header>
-        <?php include COMPONETS."nav.php";?>
+        <?php include NAVIGATION;?>
     </header>
 ```
 
@@ -548,7 +548,9 @@ En el navegador sólo aparecerá el texto dentro que se haya impreso con php y l
     </ul>
 </nav>
 ```
+
 **Nota: copiar código css en el archivo style.css ubicado en assets/css/ para añadir estilos**
+
 ```css
 *{
     margin: 0;
@@ -644,21 +646,22 @@ En el navegador sólo aparecerá el texto dentro que se haya impreso con php y l
     grid-template-columns: 1fr 2fr;
 }
 .movies{
-    /* width: 80%; */
+    margin: 40px auto;
+    width: 80%;
 }
 .movies .panel{
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(4,1fr);
     max-height: 400px;
     grid-gap: 20px;
 }
 .movies .panel .card{
     width: 100%;
-    height: 400px;
+    min-height: 400px;
 }
 .movies .panel .card .picture{
     width: 100%;
-    height: 80%;
+    height: 350px;
 }
 .movies .panel .picture img{
     width: 100%;
@@ -670,6 +673,28 @@ En el navegador sólo aparecerá el texto dentro que se haya impreso con php y l
     color: #fff;
     text-decoration: none;
     border-radius: 50%;
+}
+.btn-c{
+    width: 200px;
+    padding: 5px 10px;
+    border:  none;
+    outline: none;
+    margin: 10px auto;
+    cursor: pointer;
+    text-align: center;
+    text-decoration:none;
+}
+.btn-c.edit{
+    background: greenyellow;
+}
+.btn-c.remove{
+    background: red;
+}
+
+.input{
+    border: none;
+    border-bottom: 1px solid #000;
+    margin: 10px;
 }
 ```
 <hr>
@@ -1240,7 +1265,7 @@ Ahora codificaremos el contenido del método query
 * Después de eso podemos colocar la sentencia usando la función de prepae y enviado la sentencia sql como valor en cadena de caracteres.**Cod-A-2**
 * Ahora ejecutamos la sentencia con la variable que usamos para obtener el valor de la sentencia preparada.**Cod-A-3**
 * Luego de ejecutarla podremos obtener los datos por medio de PDO y fectchAll, dentro enviamos la clase de PDO y llamamos a la constante que quedramos para obtener los valores, en este caso usamos FETCH_OBJ.**Cod-A-4**
-* Después retornamos los datos.**Cod-A-1**
+* Después retornamos los datos.**Cod-A-5**
 
 ```php
 public function query(){
@@ -1250,9 +1275,9 @@ public function query(){
     // Preparamos un try catch en caso de que ocurra un error
     try{
         // Esta sentencia trae los valores de las películas con sus categorías
-        $query = "SELECT * FROM movie inner join ctg_movie as c on c.id_ctg = movie.id_ctg;";
+        $query = "SELECT * FROM movie inner join ctg_movie as c on c.id_ctg = movie.id_ctg where status=1;";
         $sentencia = $this->conn->prepare($query); // .**Cod-A-2**
-        $sentencia->execute($parametros);          //.**Cod-A-3**
+        $sentencia->execute([]);          //.**Cod-A-3**
         $resultSet = $sentencia->fetchAll(PDO::FETCH_OBJ); //.**Cod-A-4**
         return $resultSet;
     }catch(Exception $e){
@@ -1261,7 +1286,7 @@ public function query(){
         */
         // die($e->getMessage());
         // die($e->getTrace()); // traza del error
-        return [];
+        return [];//.**Cod-A-5**
     }
 }
 ```
@@ -1272,7 +1297,7 @@ Ahora tocará hacer los siguiente métodos, los pasos son similare, sólo cambia
 public function create(){
     if(is_null($this->conn)) return []; // si es nulo, retorna el arreglo vacío
     try{
-        $sentencia = $this->connection->prepare(
+        $sentencia = $this->conn->prepare(
             "insert into movie (name_movie,sipnosis,url_img,id_ctg)".
             " values (?,?,?,?);"
         );
@@ -1301,8 +1326,8 @@ public function create(){
 
 Las funciónes de actualizar y eliminar sólo cambiarán en la sentencia y los parámetros que se envíen
 
-El modelo quedaría así.
-
+El modelo quedaría así.<BR>
+Se ha añadido un nuevo método para consultar las categorías de las películas. <br>
 **MovieModel.php**
 
 ```php
@@ -1331,9 +1356,9 @@ class MovieModel{
         // Sino ejecuta la sentencia.
         // Preparamos un try catch en caso de que ocurra un error
         try{
-            $query = "SELECT * FROM movie inner join ctg_movie as c on c.id_ctg = movie.id_ctg;";
+            $query = "SELECT * FROM movie inner join ctg_movie as c on c.id_ctg = movie.id_ctg where status=1;";
             $sentencia = $this->conn->prepare($query); // .**Cod-A-2**
-            $sentencia->execute($parametros);          //.**Cod-A-3**
+            $sentencia->execute([]);          //.**Cod-A-3**
             $resultSet = $sentencia->fetchAll(PDO::FETCH_OBJ); //.**Cod-A-4**
             return $resultSet;
         }catch(Exception $e){
@@ -1345,10 +1370,31 @@ class MovieModel{
             return [];
         }
     }
+// Agregamos un método para buscar un sólo registro
+    public function queryOne(){
+        if(is_null($this->conn)) return null; // si es nulo, retorna el arreglo vacío
+
+        // Sino ejecuta la sentencia.
+        // Preparamos un try catch en caso de que ocurra un error
+        try{
+            $query = "SELECT * FROM movie WHERE id_movie = ?;";
+            $sentencia = $this->conn->prepare($query); // .**Cod-A-2**
+            $sentencia->execute([$this->id_movie]);          //.**Cod-A-3**
+            $resultSet = $sentencia->fetch(PDO::FETCH_OBJ); //.**Cod-A-4**
+            return $resultSet;
+        }catch(Exception $e){
+            /*
+            En caso de haber algún error se puede descomentar estas líneas para mostar cuál fue el error
+            */
+            // die($e->getMessage());
+            // die($e->getTrace()); // traza del error
+            return null;
+        }
+    }
     public function create(){
         if(is_null($this->conn)) return []; // si es nulo, retorna el arreglo vacío
         try{
-            $sentencia = $this->connection->prepare(
+            $sentencia = $this->conn->prepare(
                 "insert into movie (name_movie,sipnosis,url_img,id_ctg)".
                 " values (?,?,?,?);"
             );
@@ -1376,7 +1422,7 @@ class MovieModel{
     public function update(){
         if(is_null($this->conn)) return []; // si es nulo, retorna el arreglo vacío
         try{
-            $sentencia = $this->connection->prepare(
+            $sentencia = $this->conn->prepare(
                 "update movie set name_movie=? , sipnosis=? , url_img=? ,id_ctg=? ".
                 " where id_movie=? "
             );
@@ -1405,7 +1451,7 @@ class MovieModel{
     public function delete(){
         if(is_null($this->conn)) return []; // si es nulo, retorna el arreglo vacío
         try{
-            $sentencia = $this->connection->prepare(
+            $sentencia = $this->conn->prepare(
                 "update movie set status=0 where id_movie=? "
             );
             // En vez de eliminar los datos cambiaremos el estado a 0 que reflejará que ha sido elimiado
@@ -1426,7 +1472,31 @@ class MovieModel{
             return [];
         }
     }
+    /**
+     * Obtener todas las categorías
+     */
+    public function get_category(){
+        if(is_null($this->conn)) return []; // si es nulo, retorna el arreglo vacío
+
+        // Sino ejecuta la sentencia.
+        // Preparamos un try catch en caso de que ocurra un error
+        try{
+            $query = "SELECT * FROM ctg_movie";
+            $sentencia = $this->conn->prepare($query); // .**Cod-A-2**
+            $sentencia->execute([]);          //.**Cod-A-3**
+            $resultSet = $sentencia->fetchAll(PDO::FETCH_OBJ); //.**Cod-A-4**
+            return $resultSet;
+        }catch(Exception $e){
+            /*
+            En caso de haber algún error se puede descomentar estas líneas para mostar cuál fue el error
+            */
+            // die($e->getMessage());
+            // die($e->getTrace()); // traza del error
+            return [];
+        }
+    }
 }
+
 ```
 
 <hr>
@@ -1447,7 +1517,7 @@ class UserModel{
     public function query(){
         if(is_null($this->conn)) return null; // si es nulo, retorna un dato nulo
         try{
-            $query = "SELECT username FROM user where username = ? and password = ?;";
+            $query = "SELECT username FROM user_ where username = ? and password = ?;";
             $sentencia = $this->conn->prepare($query); 
             $sentencia->execute(
                 [
@@ -1478,3 +1548,945 @@ Se podría usar una contraseña encriptada que es lo ideal pero por el momento e
 
 ## CONTROLADORES
 
+Ahora tendremos que construir los controladores para poder hacer la lamada a los módulos.
+
+Los controladores que vamos a crear serán:
+* UserController
+* MovieController
+
+* 📦 MVC
+    * 📦 [app] ->
+        * 📦 [controller]
+            * 📄 IndexController.php
+            * 📄 MovieController.php
+            * 📄 UserController.php
+    * 📄 index.php
+
+Empezaremos por el más fácil que es el de UserController ya que tendrá pocas funciones:
+
+* Iniciar sesión -> Tendrá que recibir dos parámetros enviados por POST que serán username y password y se guardará el nombre de usuario e una sesión.
+* Cerrar sesión -> eliminará las sesiones guardadas.
+
+```php
+<?php
+class UserController{
+}
+```
+
+Ahora necesitaremos incluir su modelo para poder inciar sesión con la base de datos.
+
+```php
+require_once MODEL."UserModel.php";
+class UserController{
+}
+```
+
+Listo, ahora tenemos disponible el modelo para poder usar su clase, entonces, ahora necesitaremos un atributo que instancie esa clase para poder usarla en toda la clase del controlador, lo llamaremos userModel y lo procedemos a instanciar en el constructor, esto se instanciará con la clase UserModel ya que se está incluyendo el archivo que contiene esa clase.
+
+```php
+<?php
+require_once MODEL."UserModel.php";
+class UserController{
+    private $userModel;
+    public function __construct(){
+        $this->userModel=new UserModel();
+    }
+}
+```
+
+Ahora podremos crear métodos en el controlador y usar los métodos del modelo para el inicio de sesión dentro de los métodos del controlador por medio del objeto creado ($userModel).
+
+```php
+<?php
+require_once MODEL."UserModel.php";
+class UserController{
+    private $userModel;
+    public function __construct(){
+        $this->userModel=new UserModel();
+    }
+    public function login(){   }
+    public function logout(){   }
+
+    public function view(){
+        include_once HEADER;
+        include_once STATIC_. "login.php";
+        include_once FOOTER;
+        
+    }
+}
+```
+
+Listo, ahora necesitaremos incluir el código necesario para esos métodos.
+
+* Login.- Se encargará de leer los datos enviados por POST (username y password), validar que existan, ejecutar el método de inicio de sesión del modelo, antes de eso habría que pasarle los datos del usuario, por último validar que retorne el usuario y guardarlo en una sesión.
+
+* Logout eliminar la sesión de usuario.
+
+
+```php
+<?php
+require_once MODEL."UserModel.php";
+class UserController{
+    private $userModel;
+    public function __construct(){
+        $this->userModel=new UserModel();
+    }
+    public function login(){
+        //  Condicionar si los datos existen
+        $pageName="Login";
+        if(  isset( $_POST["username"] )  &&  isset( $_POST["password"] )  ){
+            // Asignar los valores a los atributos que declaramos en la clase del modelo
+            // Usamos el objeto del modelo
+            $this->userModel->username =  $_POST["username"];
+            $this->userModel->password =  $_POST["password"];
+
+            // Ahora que los datos están listos, podremos ejecutar el método de query, este método retorna el objeto del usuario en caso de que exista, caso contrario retorna nulo
+            $usuario = $this->userModel->query();
+            // Condicionamos si retornó datos
+            if(!$usuario){
+                // Datos vacíos
+                // Guardamos en sesión un mensaje de error
+                $error = 'Datos del usuario son incorrectos';
+                // Ahora redireccionamos a la vista de login (se tendrá que crear)
+                /*
+                    Para ello incluiremos una vista que se creará en las vistas estáticas.
+                */
+                include_once HEADER;
+                include_once STATIC_ . "login.php";
+                include_once FOOTER;
+            }else{
+                // Datos correctos
+                // Guardemos los valores en sesión
+                $_SESSION['USER'] = $usuario;
+                /*
+                En el caso de que los datos están bien se podrá redirigir al inicio
+                Usaremos la función de header("Location:");
+                */
+                header("Location:index.php");
+            }
+        }else{
+            // Si no existen mostraremos una mensaje
+            $error = 'Datos del usuario son incorrectos';
+
+            /*Notese que las variables creadas estará disponible también en el archivo de login.php*/
+            include_once HEADER;
+            include_once STATIC_ . "login.php";
+            include_once FOOTER;
+        }
+    }
+    public function logout(){  
+        // El método de logout será para eliminar la variable de sesión de USER
+        unset($_SESSION['USER']);
+        header("Location:index.php");
+    }
+        public function view(){
+        include_once HEADER;
+        include_once STATIC_. "login.php";
+        include_once FOOTER;
+        
+    }
+}
+```
+
+Ahora podremos hacer las vistas para login pero las dejaremos para el último.
+
+Estaremos desarrollando el controlador de películas.<br>
+Para eso necesitamos lo siguiente:
+
+* Mostrar todas las películas
+* Guardar la imágen del la película
+* Guardar películas
+* Editar una película
+* Eliminar una película
+* Mostrar la vista para guardar película
+* Mostrar la vista para editar una película
+
+Los pasos son similares al de UserController.
+
+**MovieController.php**
+
+```php
+<?php 
+require_once MODEL."MovieModel.php";
+class MovieController{
+    private $movieModel;
+    public function __construct(){
+        $this->movieModel=new MovieModel();
+    }
+    // Iniciaremos con el método de index
+    public function index(){}
+}
+```
+
+**MovieController.php** -> **index()**
+
+```php
+public function index(){
+    // Primero necesitaremos una variable que guarde el nombre del título de la página
+    $pageName="Peliculas";
+    // luego haremos la consulta de los datos guardados en base de datos
+    // Accedemos al método query del modelo Movie
+    $this->movieModel->query();
+    // Esto retorna datos, así que podemos guardarlos en un array
+    $peliculas = $this->movieModel->query();
+
+    // Ahora simplemente podemos mostrar las vistas, ellas se encargaran de mostrar los datos
+    include_once HEADER;
+    include_once VIEWS . 'movie/movie.php'; // crearemos un directorio y ahí un archivo para crear la plantilla.
+    include_once FOOTER;
+
+}
+```
+
+* 📦 [MVC]
+    * 📦 [views]
+        * 📦 [components]
+            * 📄 nav.php -> plantilla html
+        * 📦 [static]
+            * 📄 index.php -> plantilla html
+        * 📦 [templates]
+            * 📄 header.php -> plantilla html
+        * 📦 [movie]
+            * 📄 movie.php -> plantilla html
+            * 📄 movieForm.php -> plantilla html
+    * 📄 index.php
+
+Podremos desviarnos un poco para mostrar los datos, entonces codificaremos la vista.
+
+**views/movie/movie.php**
+
+```html
+<div class="movies">
+    <div class="panel">
+        <!-- Incluimos código php para hacer el ciclo -->
+        <?php foreach ($peliculas as $key => $pelicula) {
+            $url_img =  ROUTEAPP."/" .$pelicula->url_img;
+        ?>
+            <div class="card">
+                <div class="picture"><img src="<?php echo  $url_img?>" alt=""></div>
+                <div class="body">
+                    <p> <?php echo $pelicula->name_movie ?> </p>
+                    <p> <?php echo $pelicula->sipnosis ?> </p>
+                </div>
+                <div class="actions flex flex-center flex-y w-100-p">
+                    <button class="btn-c edit">Edit</button>
+                    <button class="btn-c remove">Eliminar</button>
+                </div>
+            </div>
+        <?php
+        }?> 
+    </div>
+</div>
+```
+Ahí estpamos recorriendo el arreglo de películas consultados en la base de datos, antes de eso tiene que tener imágenes en la ruta.<br>
+**assets/img/movies/**<br>
+
+Recuerde que el archivo sql tenía rutas, esas son de las imágenes y deben tener ese nombre con extensión .png
+
+
+```sql
+insert into movie(id_movie, name_movie, sipnosis, url_img,id_ctg)
+    values
+    (1, "pelicula 1", "sipnosis","assets/img/movies/img1.jpg",1),
+    (2, "pelicula 2", "sipnosis","assets/img/movies/img2.jpg",1),
+    (3, "pelicula 3", "sipnosis","assets/img/movies/img3.jpg",3),
+    (4, "pelicula 4", "sipnosis","assets/img/movies/img4.jpg",4),
+    (5, "pelicula 5", "sipnosis","assets/img/movies/img5.jpg",4);
+```
+
+Así<br>
+<center><img src="img/img_srcmo.png"></center>
+
+Ahora revisemos el navegador
+ 
+* Ubicamos la ruta http://locahost/mvc/index.php?c=movie<br>
+
+<img src="img/cap_movie_q.png">
+
+Ahora vemos los datos que están almacenado en la bd.
+
+Podremos proseguir haciendos las funciones del controlador.
+
+Ahora tendremos más métodos para hacerlos.
+
+```php
+<?php 
+require_once MODEL."MovieModel.php";
+class MovieController{
+    private $movieModel;
+    public function __construct(){
+        $this->movieModel=new MovieModel();
+    }
+    // Iniciaremos con el método de index
+// * Mostrar todas las películas
+    public function index(){} // ya hecho
+// * Guardar la imágen del la película
+    public function saveImage(){}
+// * Guardar películas
+    public function save(){}
+// * Eliminar una película
+    public function delete(){}
+// * Mostrar la vista para guardar película
+    public function show_new(){}
+// * Mostrar la vista para editar una película
+    public function show_edit(){}
+}
+```
+
+Seguimos con el método de la subida de imágenes, para eso crearemos métodos dentro del controlador, pero podrían ser escritas aparte y ser invocadas desde cualquier sitio.
+
+Este método no será tan detallado.<br>
+Recibe el nombre del campo de archivo en el que se envía la imágen y la ruta a guardar.
+
+**MovieController.php** -> **saveImage() y validateExt()**
+
+```php
+public function saveImage($_name, $route){
+    if(!$this->validateExt($_FILES[$_name]['name'])){
+        return null;
+    }
+    opendir($route);
+    $parts = explode(".",$_FILES[$_name]['name']);
+    // con el final del explode que sería la extensión de la imagen
+    $origen=  $_FILES[$_name]['tmp_name'];
+    $destino= $route. time(). '.'.end($parts);//ends obtiene el último valor del arreglo
+    move_uploaded_file($origen, $destino);
+    // $_FILES[$_name]['type']; tipo de archivo
+    return  $destino;
+}
+private function validateExt( $nombre){
+    $patron = "%\.(gif|jpe?g|png|svg)$%i"; 
+    return preg_match($patron, $nombre) ;
+}
+```
+
+* 📦 [MVC] ->
+    * 📦 [assets] ->
+        * 📦 [img]
+            * 📦 [movies]
+
+Ahora crearemos el método de guardar película.
+
+**MovieController.php** -> **save()**
+
+Debemos recordar que sólo el administrador puede guardar, editar y eliminar, así que haremos una condición.
+
+El envío de datos se hace desde un formulario, dentro de ese formulario existirá un campo de id, este se presentará en caso de que haya datos para editar, sino sólo se guardará uno nuevo.
+
+<img src="img/edit_png_pel_form.png">
+
+Listo, ahora sólo tendremos que conficionar si existe el id, en caso de que exista ese campo editaremos, de lo contrario guardaremos el dato
+
+```php
+public function save(){
+    // Guardará sólo si el usuario existe
+    if(isset($_SESSION['USER'])){
+        // Ahora debemos tener en cuenta los valores que llegan
+        if(
+            isset($_REQUEST["name"]) && isset($_REQUEST["sipnosis"]) && 
+            isset($_REQUEST["ctg"]) && isset($_FILES["img"])
+        ){
+            // Condicionamos que todos los campos hayan sido enviados
+            // Ahora guardamos los datos en el modelo
+            $this->movieModel->name_movie = $_REQUEST["name"];
+            $this->movieModel->sipnosis = $_REQUEST["sipnosis"];
+            $this->movieModel->id_ctg = $_REQUEST["ctg"];
+                // Guardamos la imágen
+            $this->movieModel->url_img = $this->saveImage("img", "assets/img/movies/");
+            
+            // Ahora verificamos si ha llegado un campo de id, para verificar si podremos editar
+            if(!isset($_REQUEST["id_movie"])){
+                // Guardar
+                // Ahora guardamos
+                $guardado = $this->movieModel->create();
+                // COndicionamos si guardó
+                if($guardado > 0){
+                    header("Location:index.php?c=movie");
+                }else{
+                    header("Location:index.php?c=movie&a=show_new");
+                }
+            }else{
+                // Editar
+                $this->movieModel->id_movie = $_REQUEST["id_movie"];
+                // Editamos
+                $guardado = $this->movieModel->update();
+                // COndicionamos si guardó
+                if($guardado > 0){
+                    header("Location:index.php?c=movie");
+                }else{
+                    header("Location:index.php?c=movie&a=show_edit");
+                }
+            }
+        }
+    }else{
+        // Caso contrario redireccionará al formulario
+        header("Location:index.php?c=movie&a=show_new");
+    }
+}
+```
+
+Ahora por partes
+```php
+if(isset($_SESSION['USER'])){
+```
+
+Empezamos por la primera condición, esto lo hacemos para darle algo de protección, ya que si no colocamos esa condidición cualquiera que no esté logueado podrá guardar datos.
+
+<hr>
+
+```php
+ if(
+    isset($_REQUEST["name"]) && isset($_REQUEST["sipnosis"]) && 
+    isset($_REQUEST["ctg"]) && isset($_FILES["img"])
+){
+```
+
+Esta condicional nos servirá para asegurar que todos los datos lleguen correctamente.
+
+```php
+else{
+    // Caso contrario redireccionará al formulario
+    header("Location:index.php?c=movie&a=show_new");
+}
+```
+
+Caso contrario redireccionará nuevamente al formulario.
+
+<hr>
+
+```php
+    $this->movieModel->name_movie = $_REQUEST["name"];
+    $this->movieModel->sipnosis = $_REQUEST["sipnosis"];
+    $this->movieModel->id_ctg = $_REQUEST["ctg"];
+    $this->movieModel->url_img = $this->saveImage("img", "assets/img/movies/");
+```
+
+Después de hacer las validaciones de datos podremos guardarlos, todos los nombres que están dentro de $_REQUEST[''] son los nombres de los formularios.<br>
+En la línea donde se guarda el nombre de la URL de la imágen se invoca el método para guardar la imágen y recibe el nombre del campo y la dirección donde se guardará.<br>
+Así como usamos las variables superglobales $_REQUEST, $_POST, $_GET, tambíen podemos usar $_FILE para archivos enviados desde formularios.
+
+<hr>
+
+```php
+    if(!isset($_REQUEST["id_movie"])){
+```
+
+Esta conficional se hace para poder condicionar si ha llegado un id de la película.<br>
+Esto se debe a que si intentamos editar un registro, este tendrá un id que lo identifique, pero si es un nuevo registro, este no poseerá ese id.
+
+Condicionamos si existe, pero estamos anteponiendo un **!**, eso quiere decir que negamos la respuesta, es decir ahora condicionamos si no existe.
+
+```php
+        $guardado = $this->movieModel->create();
+        if($guardado > 0){
+            header("Location:index.php?c=movie");
+        }else{
+            header("Location:index.php?c=movie&a=show_new");
+        }
+```
+
+En caso de que no se envíe un id, invocaremos el método del modelo que guarda el registro, este retornará el número de cambios que haya hecho en la tabla, en caso de que no se haya guardado retornará 0, por eso es la condición > 0.
+
+En caso de que se guarde redireccionará al índex del controlador de película, es decir, a la pantalla que presenta todas las películas.
+
+Caso contrario se dirigirá al método para mostrar el formulario.
+
+```php
+        }else{
+            // Editar
+            $this->movieModel->id_movie = $_REQUEST["id_movie"];
+            // Editamos
+            $guardado = $this->movieModel->update();
+            // COndicionamos si guardó
+            if($guardado > 0){
+                header("Location:index.php?c=movie");
+            }else{
+                header("Location:index.php?c=movie&a=show_edit");
+            }
+        }
+```
+
+Ahora entramos ej el caso de que exista un id, nos tocará guardar el valor del id para que los datos sean editados en donde coincida con ese id.
+
+Posteriormente hará lo que se hace después de guardar en cuanto a la vistas.
+
+<hr>
+
+No podremos probar este método hasta que se haga la vista del formulario y se inicie sesión, así que terminemos los métodos para hacer las vistas.
+
+**Nota: una falla de este método es que habrá que cambiar la imágen cada vez que se intente editar.**
+
+    public function delete(){}
+// * Mostrar la vista para guardar película
+    public function show_new(){}
+// * Mostrar la vista para editar una película
+    public function show_edit(){}
+
+**MovieController.php** -> **delete()**
+
+Para este método tendremos que enviar el id por medio de la url y se eliminará, pero siempre y cuándo esté logueado.
+
+```php
+public function delete(){
+    if(isset($_SESSION['USER'])){
+        // En caso de que esté logueado se elimina el id
+        $id = ( isset($_GET['id'])) ? $_GET['id'] : 0;
+        $this->movieModel->id_movie = $id;
+        $this->movieModel->delete();
+    }
+    header("Location:index.php?c=movie");
+}
+```
+
+Para esto no hay muchas complicaciones.
+
+<hr>
+
+**MovieController.php** -> **show_new()**
+
+Para este método sólo se tendrá que presentar la vista (Formulario), siempre y cuándo sea administrador.
+
+**$categories = $this->movieModel->get_category();**
+
+En esa línea estamos pidiendo los datos de las categorías por medio del model de película.
+
+```php
+public function show_new(){
+    $pageName ="Nuevo";
+    if(isset($_SESSION['USER'])){
+        $categories = $this->movieModel->get_category();
+        include_once HEADER;
+        include_once VIEWS . 'movie/movieForm.php';
+        include_once FOOTER;
+    }else{
+        header("Location:index.php");
+    }
+}
+```
+
+**MovieController.php** -> **show_edit()**
+
+Este método es muy similiar, ya que incluirá el mismo formulario, pero aquí se consultará los datos de la película según el id que se envíe.
+
+```php
+public function show_edit(){
+    if(isset($_SESSION['USER'])){
+        // Obtenemos el id enviado por la url
+        // localhos/mvc/index.php?c=movie&a?show_edit&id=131
+        $id = ( isset($_GET['id'])) ? $_GET['id'] : 0;
+        // Asignamos el id al modelo
+        $this->movieModel->id_movie = $id;
+        // Este método retornará nulo o un objeto con datos de la película
+        $dato = $this->movieModel->queryOne();
+
+        // Conficionamos si tiene datos
+        if(!is_null($dato)){
+            // En el caso de que tenga datos podemos guardalos en otra variable
+            $pelicula = $dato;
+        }
+        $categories = $this->movieModel->get_category();
+        // Luego pintaremos el formulario
+        include_once HEADER;
+        include_once VIEWS . 'movie/movieForm.php';
+        include_once FOOTER;
+    }else{
+        header("Location:index.php?c=movie&a=show_new");
+    }
+}
+```
+
+Ahora que hemos terminado los controladores podemos hacer las vistas y la aplicación estará terminada.
+
+## VISTAS
+
+* 📦 [MVC]
+    * 📦 [views]
+        * 📦 [components]
+            * 📄 nav.php -> plantilla html
+        * 📦 [static]
+            * 📄 index.php -> plantilla html
+            * 📄 login.php -> plantilla html
+        * 📦 [templates]
+            * 📄 header.php -> plantilla html
+        * 📦 [movie]
+            * 📄 movie.php -> plantilla html
+            * 📄 movieForm.php -> plantilla html
+        
+    * 📄 index.php
+
+Hagamos unas modificaciones en **nav.php**
+
+```html
+<nav class="nav-bar">
+    <p class="logo">Logo</p>
+    <span class="btn-menu flex flex-end">=</span>
+    <ul class="no-list nav">
+        <li><a href="index.php" class="flex-center active">Inicio</a></li>
+        <li><a href="index.php?c=movie&a=index" class="flex-center">Peliculas</a></li>
+        <?php
+            if(isset($_SESSION["USER"])){
+                $user=$_SESSION["USER"];
+        ?>
+            <li><a href="index.php?c=movie&a=show_new">Agregar</a></li>
+            <li><a href="#"><?php echo $user->username;?></a></li>
+            <li><a href="index.php?c=user&a=logout">Cerrar sesión</a></li>
+        <?php
+            }else{
+        ?>
+            <li><a href="index.php?c=user&a=view" class="flex-center">Iniciar Sesión</a></li>
+        <?php }?>
+    </ul>
+</nav>
+```
+
+Condicionamos las direcciones, en caso de que exista un usuario presenta opciones adicionales, caso contrario presenta la opción de iniciar sesión.
+
+📦 [views] -> 📦 [static]-> **📄 index.php**
+
+```html
+<?php
+// Condicionamos en caso de que haya un error y luego imprimimos
+if(isset($error)){
+    echo '<p class="txt-center">'.$error.'</p>';
+}
+?>
+<div class="flex-center flex">
+    <section class="flex-y flex">
+        <h2 class="txt-center">Iniciar sesión</h2>
+        <form action="index.php?c=user&a=login" method="post" class="grid grid-gap-10">
+            <input name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="password">
+            <div class="grid">
+                <input type="submit" value="login" class="btn-c edit">
+            </div>
+        </form>
+    </section>
+</div>
+```
+
+Presentamos formularios con campos de usuario y contraseña.
+* La etiqueta form tiene el atributo de action con el valor de index.php?c=user&a=login, eso indica que al momento de darle clic al botón hará la petición al servidor y requiere ese controlador con la acción de login a ejecutar.
+
+Ahora podemos hacer la prueba para inicia sesión ya que el controlador nos manejará la lógica y presentará un mensaje de error en caso de que los datos estén mal.
+
+<hr>
+Veamos lo que pasa cuando colocamos datos erróneos e intentamos iniciar sesión.
+
+<img src="img/no_Data_Valid.png">
+
+
+<img src="img/data_err_mssg.png">
+
+Nos muestra el mensaje de error que hemos indicado en el controlador.
+
+<hr>
+
+Ahora veamos que pasa cuando los datos son correctos.
+
+<img src="img/data_valid_log.png">
+
+<img src="img/login_init.png">
+
+Debido a que los datos son correctos el controlador permite el registro en la variable sesión el usuario.<br>
+Recordemos que la consulta devuelve un objeto con el atributo de username.
+
+Tendremos (User){ username="root"} en la variable de sesión, ahora la podemos usar en toda la aplicación hasta que se elimine, que es lo que hace cerrar sesión, esto elimina la sesión y la pantalla volverá al inicio.
+
+Ahora veamos qué hace la opción de películas.
+
+<img src="img/movie_show_ses.png">
+
+Llama al controlador de película y a su método de index el cuál muestra todos los datos renderizados.
+
+Ahora modificaremos el fomulario para guardar y editar.
+
+📦 [views] -> 📦 [movie]-> **📄 movieForm.php**
+
+```html
+<div class="flex flex-center">
+    <div class="container" style="width:50%">
+        <form action="index.php?c=movie&a=save" method="post" enctype="multipart/form-data" class="flex flex-y">
+            <?php if(isset($pelicula) ){    ?>
+                <input type="hidden" name="id_movie" value="<?php echo isset($pelicula)?$pelicula->id_movie:''?>">
+            <?php }
+            ?>
+            <input 
+                type="text" 
+                name="name" 
+                class="input"
+                value="<?php echo isset($pelicula)?$pelicula->name_movie:''?>"
+                placeholder="Nombre de la película"
+            >
+            <textarea 
+                class="input"
+                name="sipnosis" 
+                placeholder="Text"><?php echo isset($pelicula)?$pelicula->sipnosis:''?></textarea>
+
+            <input 
+                type="file" 
+                name="img"
+            >
+
+            <select 
+                name="ctg"
+                class="input"
+            >
+                <?php
+                    foreach($categories as $ctg){
+                        ?>
+                        
+                        <option 
+                            value="<?php echo $ctg->id_ctg?>" 
+                            <?php 
+                                if(isset($pelicula)){
+                                    if($ctg->id_ctg==$pelicula->id_ctg)
+                                        echo "selected";
+                                }
+                            ?>
+                        >
+                            <?php echo $ctg->name_ctg?>
+                        </option>
+                        <?php
+                    }
+                ?>
+            </select>
+            <input 
+                class="btn-c edit"
+                type="submit" 
+                value="<?php echo $pageName;?>"
+            >                
+        </form>
+    </div>
+</div>
+```
+
+Ahora analicemos lo más importante
+
+```html
+<form action="index.php?c=movie&a=save" method="post" enctype="multipart/form-data" class="flex flex-y">
+```
+
+Form
+
+* action="index.php?c=movie&a=save"
+    * Este atributo de form permite enviar los datos a la url que le indicamos, le enviaremos al controlador MovieController y ejecutaremos el método save.
+* method="post"
+    * Enviaremos los datos por post.
+* enctype="multipart/form-data"
+    * Le indicaremos que aparte de texto plano también enviaremos archivos.
+
+```html
+<?php 
+if(isset($pelicula) ){    
+?>
+    <input type="hidden" name="id_movie" value="<?php echo isset($pelicula)?$pelicula->id_movie:''?>">
+<?php } ?>
+```
+
+Estas líneas incluyem código php, entonces, esto lo usaremos de la siguiente manera, al momento de agregar nuevos datos aparecerán todos los campos vacíos, pero al momento de editar tendremos que tener los datos existentes.
+
+Entonces significa que cuando editemos tendremos una variable con el dato de dicha película, por eso está la condicional llamada $película, que es la que tendrá los datos para editar, pero cuando se agregue uno nuevo esta variable no tendrá datos, por eso no entrará a la condicional y el input que está dentro no se mostrará.
+
+El input dentro de esa condicional indica el **id** de la película, el cual es necesario para saber qué acción realizar en el controlador.
+
+Ahora ese input muestra varios atributos.
+
+* input
+    * type = "hidden"
+        * esto nos indica que ese campo va a estar oculto, no visible para el usuario, pero estará ahí.
+    * name="id_movie"
+        * Este será el nombre con el cuál el controlador recoja el dato ya sea con $_REQUEST o por _$_POST
+        * Ahora esto
+
+```php
+ value="<?php echo isset($pelicula)?$pelicula->id_movie:''?>"
+```
+
+Este atributo va a indicar el valor del campo, pero dentro de las comillas vemos un código en php, esto lo incluimos dentro de las comillas para poder imprimir el valor que existe en caso de que se vaya a editar.
+
+Se hará un **echo** del atributo **id_movie** del objeto **pelicula** si que existe "**isset(pelicula)**" el objeto pelicula, caso contrario "**:**" imprime un contenido vacío.
+
+<hr>
+
+```html
+<input 
+    type="text" 
+    name="name" 
+    class="input"
+    value="<?php echo isset($pelicula)?$pelicula->name_movie:''?>"
+    placeholder="Nombre de la película"
+>
+```
+
+Algo similar para con ese campo.
+
+* Es de tipo texto.
+* Tiene el nombre **name**.
+* Y el valor imprimirá el atributo **name_movie** (campo nombrado así en la base de datos.) del objeto **pelicula** si es que exite "**isset($pelicula)**", caso contrario se deja vacío el campo   **:''** .
+
+<hr>
+
+```html
+<textarea 
+    class="input"
+    name="sipnosis" 
+    placeholder="Text"
+    ><?php echo isset($pelicula)?$pelicula->sipnosis:''?></textarea>
+```
+
+Con el textarea ocurre algo diferente, este no tiene un atributo value, su valor se imprime dentro de las etiquetas, y no es conveniente dejar saltos de línea entre las etiquetas debido a que lo tomaría como valor.
+<hr>
+
+```html
+<input 
+    type="file" 
+    name="img"
+>
+```
+
+En este input se insertará la imágen y en esta etiqueta no existe el atributo value, por lo que no se podrá setear el valor de la url.
+
+<hr>
+
+```html
+<select 
+    name="ctg"
+    class="input"
+>
+    <?php
+        foreach($categories as $ctg){
+            ?>
+            
+            <option 
+                value="<?php echo $ctg->id_ctg?>" 
+                <?php 
+                    if(isset($pelicula)){
+                        if($ctg->id_ctg == $pelicula->id_ctg)
+                            echo "selected";
+                    }
+                ?>
+            >
+                <?php echo $ctg->name_ctg?>
+            </option>
+            <?php
+        }
+    ?>
+    
+</select>
+```
+
+En la campo select no hay nada de novedoso, pero el contenido que tiene dentro de las etiquetas es algo medio complejo.
+
+* Primero observamos un foreach, que nos indica que recorrerá un arreglo, dicho arreglo es la variable $categories que mostrará las categorías almacenadas en la base de datos, que han sido obtenidas por el modelo de peliculas.
+
+* Ahora por cada recorrido tendremos el objeto $ctg el cuál contendrá el id y el nombre de la cateogría
+
+* Cerramos el código en php, pero dejamos abierto la llave por lo que incluiremos nuevo código, al finalizar volveremos a abrir la etiquetas de php para cerrar la llave, esto no es ni un problema.
+* Dentro de aquello pondremos una etiqueta **option** de html.
+    * Ahora esa etiqueta tendrá un valor, el cuál será el id de dicho objeto categoría, incluyendo código php dentro de las comillas.
+    * Todavía no se cierran la etiqueta inicial.
+    * Las siguientes líneas de código se hacen para que se imprima el atributo selected para que esa opción se seleccione automáticamente.
+    * Podemos poner código php, ahora condicionamos si existe el objeto película, ya que esto sólo sirve cuando se editará.
+    * En el caso de que exista podemos preguntar si el id de la categoría es igual al id de la categoría de la película.
+
+<hr>
+
+```html
+<input 
+    class="btn-c edit"
+    type="submit" 
+    value="<?php echo $pageName;?>"
+> 
+```
+
+Ahora tenemos el input de tipo submit, es el que enviará los datos al servidor.<br>Este tomará el valor del nombre de la página para que sea dinámico y muestre si se va a editar o guardar.
+
+Listo, eso es todo en cuanto al formulario, si todo va correcto nos guardará los datos en la base de datos y nos mostrá en la pantalla de inicio.
+
+<hr>
+
+<img src="img/data_movie.png">
+
+<img src="img/dara_pres.png">
+
+<img src="img/file_save.png">
+
+Todo ha salido bien, y vemos que la imágen se ha guardado en la carpeta de movie, con un nombre diferente a la original, eso pasa porque al guardar la imágen se le añade una función que devuelve el tiempo **time()** de php.
+
+Ahora modificaremos el archivo de plantilla **movie.php**.
+
+📦 [views] -> 📦 [movie]-> **📄 movie.php**
+
+```html
+<div class="movies">
+    <div class="panel">
+        <!-- Incluimos código php para hacer el ciclo -->
+        <?php foreach ($peliculas as $key => $pelicula) {
+            $url_img =  ROUTEAPP."/" .$pelicula->url_img;
+        ?>
+            <div class="card">
+                <div class="picture"><img src="<?php echo  $url_img?>" alt=""></div>
+                <div class="body">
+                    <p>Nombre: <?php echo $pelicula->name_movie ?> </p>
+                    <p>Sipnosis: <?php echo $pelicula->sipnosis ?> </p>
+                    <p>Género: <?php echo $pelicula->name_ctg ?> </p>
+                </div>
+                <?php
+                if(isset($_SESSION['USER'])){
+                    ?>
+                <div class="actions flex flex-center flex-y w-100-p">
+                    <a class="btn-c edit" href="index.php?c=movie&a=show_edit&id=<?php echo $pelicula->id_movie ?>">Edit</a>
+                    <a class="btn-c remove" href="index.php?c=movie&a=show_edit&id=<?php echo $pelicula->delete ?>">Eliminar</a>
+                </div>
+                <?php
+                }
+                ?>
+            </div>
+        <?php
+        }?> 
+    </div>
+</div>
+```
+
+Las líneas modificadas fueron:
+
+```html
+<?php
+    if(isset($_SESSION['USER'])){
+        ?>
+    <div class="actions flex flex-center flex-y w-100-p">
+        <a class="btn-c edit" href="index.php?c=movie&a=show_edit&id=<?php echo $pelicula->id_movie ?>">Edit</a>
+        <a class="btn-c remove" href="index.php?c=movie&a=delete&id=<?php echo $pelicula->id_movie ?>">Eliminar</a>
+    </div>
+    <?php
+    }
+?>
+```
+
+Le hemos añadido links la cuál llama a métodos diferentes del controlador de película (show_edit, delete), ahora ejecutaremos el de elmiminar
+
+<img src="img/data_obs.png">
+
+Ahora podremos ver los cambios en el gestor de base de datos entrando a http://localhost/phpmyadmin/.
+
+<img src="img/_show_dele.png">
+
+* 1. Entramos a la base de datos.
+* 2. Entramos a la tabla de movie.
+* 3. Vemos es estado, recordemos que eliminar cambia el estado de 0 a 1, y el query consulta a todos los datos siempre y cuando tengan el valor de 1, esta es una simulación de eliminación ya que no es aconsejable eliminar los datos.
+
+Ahora intentaremos en editar, así que pulsaremos sobre una película en su botón editar.
+
+<img src="img/cap_vod.png">
+
+Vemos que nos aparecen los datos originales que tenía la película, y en las opciones de desarrolladores observamos que tenemos la etiqueta con el id del post, y también las opciones y una de ellas tiene **selected** en su etiqueta, por ende esa opción tomará la etiqueta **sekected** (ver en el navegador).
+
+Ahora cambiaremos los datos.
+
+<img src="img/pel_Edit.png">
+
+Listo ya está, al momento de cerrar sesión no se mostrarán las opciones del administrador.
+
+<img src="img/op_not.png">
+
+FIN :´v
