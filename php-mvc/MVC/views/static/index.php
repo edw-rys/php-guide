@@ -1,0 +1,1 @@
+<h1>Bienvenido a la pestaña de index</h1>
